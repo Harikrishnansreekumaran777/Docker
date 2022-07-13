@@ -1,0 +1,35 @@
+#Base image
+FROM ubuntu
+ARG DEBIAN_FRONTEND=noninteractive
+LABEL version="latest" maintainer="Harikrishnan <harikrish.sree@gmail.com>"
+
+#update the image
+RUN apt-get update
+RUN apt-get install -y libgbm1
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository ppa:deadsnakes/ppa
+
+#install python
+RUN apt install -y python3.9
+RUN apt install -y python3-pip
+
+#install robotframework and seleniumlibrary
+
+RUN pip3 install robotframework
+RUN pip3 install robotframework-seleniumlibrary
+
+#The following are needed for Chrome and Chromedriver installation
+RUN apt-get install wget
+RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    && dpkg -i google-chrome*.deb \
+    && rm google-chrome*.deb \
+    && wget -q https://chromedriver.storage.googleapis.com/89.0.4389.23/chromedriver_linux64.zip \
+    && unzip chromedriver_linux64.zip \
+    && rm chromedriver_linux64.zip \
+    && mv chromedriver /usr/local/bin \
+    && chmod +x /usr/local/bin/chromedriver
+
+#Robot Specific
+RUN mkdir /robot
+RUN mkdir /results
+ENTRYPOINT ["robot"]
