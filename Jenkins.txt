@@ -1,0 +1,51 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: "master", url:'https://github.com/Harikrishnansreekumaran777/Docker.git'
+            }
+        }
+        stage('Test') {
+            steps{
+                sh 'docker run harikrishnan/robot DemoHW.robot'
+            }
+        }
+    }
+    post {
+        always {
+            archive (includes: 'reports/*.html')
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
